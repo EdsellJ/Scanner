@@ -12,7 +12,7 @@ using namespace std;
 // --------- Two DFAs ---------------------------------
 
 // WORD DFA 
-// Done by: test 2 branch nairie
+// Done by: test 2 branch nairie 2222222222222222
 // RE:   **
 bool word (string s)
 {
