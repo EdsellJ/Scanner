@@ -6,7 +6,7 @@ using namespace std;
 /* Look for all **'s and complete them */
 
 //=====================================================
-// File scanner.cpp written by: Group Number: ** 
+// File scanner.cpp written by: Group Number: 4
 //=====================================================
 
 // --------- Two DFAs ---------------------------------
@@ -38,21 +38,23 @@ bool word (string s)
   // where did I end up????
   if (state == 2) return(true);  // end in a final state
    else return(false);
-  */
+  //
 }
 
 // PERIOD DFA 
-// Done by: **
+// Done by: Wesley
 bool period (string s)
 {  // complete this **
+  if (s[0] == '.') return true;
+  return false;
 }
 
 // ------ Three  Tables -------------------------------------
 
-// TABLES Done by: **
+// TABLES Done by: 
 
 // ** Update the tokentype to be WORD1, WORD2, PERIOD, ERROR, EOFM, etc.
-enum tokentype {ERROR, };
+enum tokentype {WORD1, WORD2, PERIOD, ERROR, EOFM, VERB, VERBNEG, VERBPAST, VERBPASTNEG, IS, WAS, OBJECT, SUBJECT, DESTINATION, PRONOUN, CONNECTOR};
 
 // ** For the display names of tokens - must be in the same order as the tokentype.
 string tokenName[30] = { }; 
@@ -61,6 +63,9 @@ string tokenName[30] = { };
 // ** Do not require any file input for this. Hard code the table.
 // ** a.out should work without any additional files.
 
+string reservedwords[] {
+  {"masu", VERB}
+};
 
 // ------------ Scaner and Driver ----------------------- 
 
@@ -74,7 +79,8 @@ int scanner(tokentype& tt, string& w)
   // ** Grab the next word from the file via fin
   // 1. If it is eofm, return right now.   
 
-  dasdsadsa
+  fin >> w;
+  if (w == "eofm") return 0;
 
   /*  **
   2. Call the token functions (word and period) 
