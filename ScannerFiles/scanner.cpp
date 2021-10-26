@@ -74,6 +74,8 @@ int scanner(tokentype& tt, string& w)
   // ** Grab the next word from the file via fin
   // 1. If it is eofm, return right now.   
 
+  dasdsadsa
+
   /*  **
   2. Call the token functions (word and period) 
      one after another (if-then-else).
