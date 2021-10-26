@@ -38,7 +38,7 @@ bool word (string s)
   // where did I end up????
   if (state == 2) return(true);  // end in a final state
    else return(false);
-  */
+ 
 }
 
 // PERIOD DFA 
