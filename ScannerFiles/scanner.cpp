@@ -12,7 +12,7 @@ using namespace std;
 // --------- Two DFAs ---------------------------------
 
 // WORD DFA 
-// Done by: **
+// Done by: test
 // RE:   **
 bool word (string s)
 {
