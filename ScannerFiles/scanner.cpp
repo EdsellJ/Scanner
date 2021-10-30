@@ -40,6 +40,8 @@ bool word (string s)
           case 'a':
           case 'e':
           case 'i':
+          case 'E':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
           //'dwzjy' -> qsa
@@ -64,17 +66,40 @@ bool word (string s)
           //t -> qt
           case 't': state = 6; break;
           
-
+          default: return false;
         }
         //at q0q1
       } else if (state == 1) {
         switch (s[charpos]) {
           case 'a':
           case 'e':
+          case 'E':
           case 'i':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
           case 'n': state = 2; break;
+          //'dwzjy' -> qsa
+          case 'd':
+          case 'w':
+          case 'z':
+          case 'j':
+          case 'y': state = 3; break;
+          //'s' -> qs
+          case 's': state = 4; break;
+          //'c; -> qc
+          case 'c': state = 5; break;
+          //'t' -> qt
+          case 't': state = 6; break;
+          //'bghkmpr' -> qy
+          case 'b':
+          case 'g':
+          case 'h':
+          case 'k':
+          case 'm':
+          case 'p':
+          case 'r': state = 7; break;
+          
           
           default: return false;
         }
@@ -98,8 +123,16 @@ bool word (string s)
           case 'a':
           case 'e':
           case 'i':
+          case 'E':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
+          
+          case 'c': state = 5; break;
+
+          case 's': state = 4; break;
+
+          case 't': state = 6; break;
 
           default: return false;
         }
@@ -113,36 +146,42 @@ bool word (string s)
   6 = qt
   7 = qy
   */
-      } else if (state = 3) {
+      } else if (state == 3) {
         switch (s[charpos]) {
           case 'a':
           case 'e':
           case 'i':
+          case 'E':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
           default: return false;
         }
-      } else if (state = 4) {
+      } else if (state == 4) {
         switch (s[charpos]) {
           case 'h': state = 3; break;
           case 'a':
           case 'e':
           case 'i':
+          case 'E':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
           default: return false;
         }
-      } else if (state = 5) {
+      } else if (state == 5) {
         switch (s[charpos]) {
           case 'h': state = 3; break;
 
           default: return false;
         }
-      } else if (state = 6) {
+      } else if (state == 6) {
         switch (s[charpos]) {
           case 'a':
           case 'e':
+          case 'E':
           case 'i':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
 
@@ -150,11 +189,13 @@ bool word (string s)
 
           default: return false;
         }
-      } else if (state = 7) {
+      } else if (state == 7) {
         switch (s[charpos]) {
           case 'a':
           case 'e':
+          case 'E':
           case 'i':
+          case 'I':
           case 'o':
           case 'u': state = 1; break;
 
@@ -169,6 +210,7 @@ bool word (string s)
 
   // where did I end up????
   if (state == 0 || state == 1 || state == 2) return(true);  // end in a final state
+  //if (1 == 1) return true;
    else return(false);
   //
 }
@@ -189,65 +231,37 @@ bool period (string s)
 enum tokentype {WORD1, WORD2, PERIOD, ERROR, EOFM, VERB, VERBNEG, VERBPAST, VERBPASTNEG, IS, WAS, OBJECT, SUBJECT, DESTINATION, PRONOUN, CONNECTOR};
 
 // ** For the display names of tokens - must be in the same order as the tokentype.
-string tokenName[30] = {"WORD1", "WORD2", "PERIOD", "ERROR", "EOFM" "VERB" "VERBNEG", "VERBPAST", "VERBPASTNEG", "IS", "WAS", "OBJECT", "SUBJECT", "DESTINATION", "PRONOUN", "CONNECTOR"}; 
+string tokenName[30] = {"WORD1", "WORD2", "PERIOD", "ERROR", "EOFM", "VERB", "VERBNEG", "VERBPAST", "VERBPASTNEG", "IS", "WAS", "OBJECT", "SUBJECT", "DESTINATION", "PRONOUN", "CONNECTOR"}; 
 
 // ** Need the reservedwords table to be set up here. 
 // ** Do not require any file input for this. Hard code the table.
 // ** a.out should work without any additional files.
 
-std::map<string, tokentype> reservedwords; 
+map<string, tokentype> reservedwords =
+    {
+        {"masu", tokentype::VERB},
+        {"masen", tokentype::VERBNEG},
+        {"mashita", tokentype::VERBPAST},
+        {"masendeshita", tokentype::VERBPASTNEG},
+        {"desu", tokentype::IS},
+        {"deshita", tokentype::WAS},
 
-// gquiz1.insert(pair<int, int>(1, 40));
-// reservedwords.insert(pair<string, enum>("masu", VERB));
+        {"o", tokentype::OBJECT},
+        {"wa", tokentype::SUBJECT},
+        {"ni", tokentype::DESTINATION},
+        
+        {"watashi", tokentype::PRONOUN},
+        {"anata", tokentype::PRONOUN},
+        {"kare", tokentype::PRONOUN},
+        {"kanojo", tokentype::PRONOUN},
+        {"sore", tokentype::PRONOUN},
 
-  //{"masu", VERB},
-  //{"masen", VERBNEG},
-  //{"mashita", VERBPAST},
-  //{"masendeshita", VERBPASTNEG},
-  //{"desu", IS},
-  //{"deshita", WAS},
+        {"mata", tokentype::CONNECTOR},
+        {"soshite", tokentype::CONNECTOR},
+        {"shikashi", tokentype::CONNECTOR},
+        {"dakara", tokentype::CONNECTOR},
 
-  //{"o", OBJECT},
-  //{"wa", SUBJECT},
-  //{"ni", DESTINATION},
-
-  //{"watashi", PRONOUN},
-  // {"anata", PRONOUN},
-  // {"kare", PRONOUN},
-  // {"kanojo", PRONOUN},
-  // {"sore", PRONOUN},
-
-  // {"mata", CONNECTOR},
-  // {"soshite", CONNECTOR},
-  // {"shikashi", CONNECTOR},
-  // {"dakara", CONNECTOR},
-
-  // {"eofm", EOFM}
-
-  reservedwords.insert(pair<string, enum>("masu", VERB));
-  reservedwords.insert(pair<string, enum>("masen", VERBNEG));
-  reservedwords.insert(pair<string, enum>("mashita", VERBPAST));
-  reservedwords.insert(pair<string, enum>("masendeshita", VERBPASTNEG));
-  reservedwords.insert(pair<string, enum>("desu", IS));
-  reservedwords.insert(pair<string, enum>("deshita", WAS));
-
-  reservedwords.insert(pair<string, enum>("o", OBJECT));
-  reservedwords.insert(pair<string, enum>("wa", SUBJECT));
-  reservedwords.insert(pair<string, enum>("ni", DESTINATION));
-
-  reservedwords.insert(pair<string, enum>("watashi", PRONOUN));
-  reservedwords.insert(pair<string, enum>("anata", PRONOUN));
-  reservedwords.insert(pair<string, enum>("kare", PRONOUN));
-  reservedwords.insert(pair<string, enum>("kanojo", PRONOUN));
-  reservedwords.insert(pair<string, enum>("sore", PRONOUN));
-
-  reservedwords.insert(pair<string, enum>("mata", CONNECTOR));
-  reservedwords.insert(pair<string, enum>("soshite", CONNECTOR));
-  reservedwords.insert(pair<string, enum>("shikashi", CONNECTOR));
-  reservedwords.insert(pair<string, enum>("dakara", CONNECTOR));
-
-  reservedwords.insert(pair<string, enum>("eofm", EOFM));
-};
+        {"eofm", tokentype::EOFM}};
 
 // ------------ Scaner and Driver ----------------------- 
 
@@ -272,16 +286,27 @@ int scanner(tokentype& tt, string& w)
      Let the tokentype be ERROR in that case.
   */
 //edited by Kelyn
+  //cout << "we are at: " << w << endl;
   if (word(w)){
-    tt = OBJECT; //placeholder for now until we determine the actual token type
+      if (reservedwords.find(w) != reservedwords.end()){
+        tt = reservedwords.at(w); //assigns tt the token type at the word found in reserved words table
+      }
+      else if (w[w.length() - 1] == 'E' || w[w.length() - 1] == 'I') {
+        cout << "letter is: " << w[w.length() - 1] << ", word is: " << w << endl;
+        tt = WORD2;
+      } 
+      else {
+        tt = WORD1;
+      }
+      return 0;
   }
   else if(period(w)){
     tt = PERIOD;
+    return 0;
   }
   else{
     tt = ERROR;
-    cout << "You have encountered a Lexical Error OH NO!!"
-    return 0;
+    //cout << "You have encountered a Lexical Error OH NO!!" << endl;
   }
 
   /*
@@ -291,15 +316,7 @@ int scanner(tokentype& tt, string& w)
      decided based on the last character.
   */
  //edited by Kelyn
-  if (reservedwords.find(w) != reservedwords.end()){
-     tt = reservedwords.at(w); //assigns tt the token type at the word found in reserved words table
-  }
-  else if (w[w.length() - 1] == 'E' || w[w.length() - 1 == 'I']) {
-    tt = WORD2;
-  } 
-  else {
-    tt = WORD1;
-  }
+
 
   //4. Return the token type & string  (pass by reference)
 
@@ -325,15 +342,15 @@ int main()
 
   fin.open(filename.c_str());
 
-  // the loop continues until eofm is returned.
    while (true)
     {
        scanner(thetype, theword);  // call the scanner which sets
                                    // the arguments  
        if (theword == "eofm") break;  // stop now
-
-       cout << "Type is:" << tokenName[thetype] << endl;
-       cout << "Word is:" << theword << endl;   
+     
+      
+      cout << "Type is:" << tokenName[thetype] << endl;
+      cout << "Word is:" << theword << endl;  
     }
 
    cout << "End of file is encountered." << endl;
