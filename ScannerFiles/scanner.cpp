@@ -1,6 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include <map> //in order to check if the word exists in the reservedwords table
 using namespace std;
 
 /* Look for all **'s and complete them */
@@ -194,30 +195,58 @@ string tokenName[30] = {"WORD1", "WORD2", "PERIOD", "ERROR", "EOFM" "VERB" "VERB
 // ** Do not require any file input for this. Hard code the table.
 // ** a.out should work without any additional files.
 
-string reservedwords[] {
-  {"masu", VERB},
-  {"masen", VERBNEG},
-  {"mashita", VERBPAST},
-  {"masendeshita", VERBPASTNEG},
-  {"desu", IS},
-  {"deshita", WAS},
+std::map<string, tokentype> reservedwords; 
 
-  {"o", OBJECT},
-  {"wa", SUBJECT},
-  {"ni", DESTINATION},
+// gquiz1.insert(pair<int, int>(1, 40));
+// reservedwords.insert(pair<string, enum>("masu", VERB));
 
-  {"watashi", PRONOUN},
-  {"anata", PRONOUN},
-  {"kare", PRONOUN},
-  {"kanojo", PRONOUN},
-  {"sore", PRONOUN},
+  //{"masu", VERB},
+  //{"masen", VERBNEG},
+  //{"mashita", VERBPAST},
+  //{"masendeshita", VERBPASTNEG},
+  //{"desu", IS},
+  //{"deshita", WAS},
 
-  {"mata", CONNECTOR},
-  {"soshite", CONNECTOR},
-  {"shikashi", CONNECTOR},
-  {"dakara", CONNECTOR},
+  //{"o", OBJECT},
+  //{"wa", SUBJECT},
+  //{"ni", DESTINATION},
 
-  {"eofm", EOFM}
+  //{"watashi", PRONOUN},
+  // {"anata", PRONOUN},
+  // {"kare", PRONOUN},
+  // {"kanojo", PRONOUN},
+  // {"sore", PRONOUN},
+
+  // {"mata", CONNECTOR},
+  // {"soshite", CONNECTOR},
+  // {"shikashi", CONNECTOR},
+  // {"dakara", CONNECTOR},
+
+  // {"eofm", EOFM}
+
+  reservedwords.insert(pair<string, enum>("masu", VERB));
+  reservedwords.insert(pair<string, enum>("masen", VERBNEG));
+  reservedwords.insert(pair<string, enum>("mashita", VERBPAST));
+  reservedwords.insert(pair<string, enum>("masendeshita", VERBPASTNEG));
+  reservedwords.insert(pair<string, enum>("desu", IS));
+  reservedwords.insert(pair<string, enum>("deshita", WAS));
+
+  reservedwords.insert(pair<string, enum>("o", OBJECT));
+  reservedwords.insert(pair<string, enum>("wa", SUBJECT));
+  reservedwords.insert(pair<string, enum>("ni", DESTINATION));
+
+  reservedwords.insert(pair<string, enum>("watashi", PRONOUN));
+  reservedwords.insert(pair<string, enum>("anata", PRONOUN));
+  reservedwords.insert(pair<string, enum>("kare", PRONOUN));
+  reservedwords.insert(pair<string, enum>("kanojo", PRONOUN));
+  reservedwords.insert(pair<string, enum>("sore", PRONOUN));
+
+  reservedwords.insert(pair<string, enum>("mata", CONNECTOR));
+  reservedwords.insert(pair<string, enum>("soshite", CONNECTOR));
+  reservedwords.insert(pair<string, enum>("shikashi", CONNECTOR));
+  reservedwords.insert(pair<string, enum>("dakara", CONNECTOR));
+
+  reservedwords.insert(pair<string, enum>("eofm", EOFM));
 };
 
 // ------------ Scaner and Driver ----------------------- 
@@ -226,12 +255,9 @@ ifstream fin;  // global stream for reading from the input file
 
 // Scanner processes only one word each time it is called
 // Gives back the token type and the word itself
-// ** Done by: Wesley
+// ** Done by: Wesley & Kelyn
 int scanner(tokentype& tt, string& w)
 {
-
-  bool isword;
-  bool isperiod;
 
   // ** Grab the next word from the file via fin
   // 1. If it is eofm, return right now.   
@@ -245,14 +271,18 @@ int scanner(tokentype& tt, string& w)
      Generate a lexical error message if both DFAs failed.
      Let the tokentype be ERROR in that case.
   */
-
- isword = word(w);
- isperiod = period(w);
- if(isword == false && isperiod == false) {
-   cout << "Lexical error message: Both DFAs failed\n";
-   tt = ERROR;
-   return 0;
- }
+//edited by Kelyn
+  if (word(w)){
+    tt = OBJECT; //placeholder for now until we determine the actual token type
+  }
+  else if(period(w)){
+    tt = PERIOD;
+  }
+  else{
+    tt = ERROR;
+    cout << "You have encountered a Lexical Error OH NO!!"
+    return 0;
+  }
 
   /*
   3. If it was a word,
@@ -260,10 +290,14 @@ int scanner(tokentype& tt, string& w)
      If not reserved, tokentype is WORD1 or WORD2
      decided based on the last character.
   */
-
-  if (w[w.length() - 1] == 'E' || w[w.length() - 1 == 'I']) {
+ //edited by Kelyn
+  if (reservedwords.find(w) != reservedwords.end()){
+     tt = reservedwords.at(w); //assigns tt the token type at the word found in reserved words table
+  }
+  else if (w[w.length() - 1] == 'E' || w[w.length() - 1 == 'I']) {
     tt = WORD2;
-  } else {
+  } 
+  else {
     tt = WORD1;
   }
 
